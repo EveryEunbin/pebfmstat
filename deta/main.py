@@ -26,9 +26,6 @@ sg_data = {
     "total": [466, 384, 65]
 }
 
-# def customSort(k):
-#     return k['date']
-
 app = Flask(__name__)
 
 CORS(app)
