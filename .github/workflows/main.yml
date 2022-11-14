@@ -1,10 +1,8 @@
 name: scrape
 on:
-  workflow_dispatch:
-env:
-  DETA_PROJECT_KEY: ${{ secrets.DETA_PROJECT_KEY }}
-  USERNAME: ${{ secrets.USERNAME }}
-  PASSWORD: ${{ secrets.PASSWORD }}
+  schedule:
+    - cron: '58 16 * * *'
+    
 jobs:
   scrape:
     runs-on: ubuntu-latest
@@ -28,4 +26,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r github_action/requirements.txt
       - name: Run the scraping script
+        env:
+          DETA_PROJECT_KEY: ${{ secrets.DETA_PROJECT_KEY }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
         run: python github_action/main.py
