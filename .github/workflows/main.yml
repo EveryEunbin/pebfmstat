@@ -1,6 +1,10 @@
 name: scrape
 on:
   workflow_dispatch:
+env:
+  DETA_PROJECT_KEY: ${{ secrets.DETA_PROJECT_KEY }}
+  USERNAME: ${{ secrets.USERNAME }}
+  PASSWORD: ${{ secrets.PASSWORD }}
 jobs:
   scrape:
     runs-on: ubuntu-latest
