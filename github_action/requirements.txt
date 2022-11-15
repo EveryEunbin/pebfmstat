@@ -5,3 +5,5 @@ selenium
 deta
 python-dotenv
 packaging
+chromedriver-autoinstaller
+setuptools
