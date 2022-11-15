@@ -9,7 +9,6 @@ import chromedriver_autoinstaller
 chromedriver_autoinstaller.install()
 #driver = webdriver.Chrome(service=ChromiumService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()))
 
-
 import os
 import datetime
 import time
@@ -49,14 +48,12 @@ def subtract_arr(arrone,arrtwo):
     return res
 
 ## Simple example
-
 # driver = webdriver.Chrome(options=chrome_options)
 # driver.get('http://github.com')
 # print(driver.title)
 # driver.stop_client()
 # driver.close()
 # driver.quit()
-
 
 #################### MY ######################################################
 
@@ -99,5 +96,14 @@ def app_my(url):
     data = {"date": x.strftime("%Y-%m-%d %H:%M"), "country":"my", "reserved": my_count_reserved, "available": my_count_available, "available_total": sum(my_count_available), "reserved_total": sum(my_count_reserved)}
     print(data)
     db.put(data)
+    test_data = db.fetch({'date?contains': x.strftime("%Y-%m-%d %H")})
+    if len(test_data.items)==2:
+        items = test_data.items
+        item_one = items[0]
+        item_two = items[1]
+        if item_one['reserved_total']>=item_two['reserved_total']:
+            db.delete(item_two['key'])
+        else:
+            db.delete(item_one['key'])    
 
 app_my(my_url)
