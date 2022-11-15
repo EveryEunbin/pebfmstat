@@ -1,9 +1,14 @@
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.utils import ChromeType
+#from webdriver_manager.utils import ChromeType
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+import chromedriver_autoinstaller
+chromedriver_autoinstaller.install()
+#driver = webdriver.Chrome(service=ChromiumService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()))
+
 
 import os
 import datetime
@@ -44,56 +49,55 @@ def subtract_arr(arrone,arrtwo):
     return res
 
 ## Simple example
-# driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
-# driver.get('http://google.com')
+
+# driver = webdriver.Chrome(options=chrome_options)
+# driver.get('http://github.com')
 # print(driver.title)
+# driver.stop_client()
+# driver.close()
+# driver.quit()
 
 
-#################### TH ######################################################
+#################### MY ######################################################
 
-th_url = "https://www.kokoconnection.com/EunBin_Note_Binkan_in_BKK/step.php"
-def app_th(url):
+my_url = "https://www.excitix.com.my/user/login" 
+def app_my(url):
     x = datetime.datetime.now()
-    # date_end = datetime.datetime(2022,11,5)
-    # if x > date_end:
-    #     return
+    date_end = datetime.datetime(2022,12,24)
+    if x > date_end:
+        return
 
-    th_total = [406,406,240,240,240,240,180,180]
-    th_id_zone = ["seat_image_map_0", "seat_image_map_1","seat_image_map_2","seat_image_map_3","seat_image_map_4","seat_image_map_5","seat_image_map_6","seat_image_map_7"]
-
-    th_count_reserved = []
+    my_total = [500,500,300,300,380,380]
+    my_zone = ["VIPL", "VIPR", "CAT1L", "CAT1R", "CAT2L", "CAT2L"]
+    my_zone_url = [179,180,181,182,183,184]
+    my_count_reserved = []
     
-    for i in range(len(th_id_zone)):
-        driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
-        driver.get(url)
-        element_username = driver.find_element(By.NAME,"username")
-        element_username.send_keys(os.getenv('USERNAME'))
-        
-        time.sleep(1)
-        element_passwd = driver.find_element(By.NAME,"passwd")
-        element_passwd.send_keys(os.getenv('PASSWORD'))
-        time.sleep(1)
-        element_submit = driver.find_element(By.NAME,"SUBMIT")
-        element_submit.click()
-        time.sleep(2)
-        print(i)
-        driver.execute_script("arguments[0].click();",driver.find_element(By.ID,th_id_zone[i]))
-        time.sleep(3)
-        # print(driver.current_url)
-        html_doc = driver.page_source
-        count = count_reserved(html_doc, "#format img")
-        # check count == 0 bc that zone is not available
-        if count == 0:
-            th_count_reserved.append(th_total[i])
-        else: 
-            th_count_reserved.append(count)
-        driver.quit()
-    print(th_count_reserved)
-    print(sum(th_count_reserved))
-    th_count_available = subtract_arr(th_total,th_count_reserved)
+    driver = webdriver.Chrome(options=chrome_options)
+    driver.get(url)
+    element_username = driver.find_element(By.NAME,"username")
+    element_username.send_keys("ipst.dpsttest@gmail.com")
+    time.sleep(1)
+    element_passwd = driver.find_element(By.NAME,"password")
+    element_passwd.send_keys("dpst2022")
+    time.sleep(1)
+    element_submit = driver.find_element(By.XPATH,"//button[@type='submit']")
+    element_submit.click()
+    time.sleep(2)
 
-    data = {"date": x.strftime("%Y-%m-%d %H:%M"), "country":"th", "reserved": th_count_reserved, "available": th_count_available, "available_total": sum(th_count_available), "reserved_total": sum(th_count_reserved)}
-    # print(data)
+    for i in range(len(my_zone)):
+        print(my_zone[i])
+        script = "window.location.replace('https://www.excitix.com.my/checkout/{}')".format(my_zone_url[i])
+        driver.execute_script(script)
+        time.sleep(5)
+        html_doc = driver.page_source
+        count = count_reserved(html_doc, ".occupied")
+        my_count_reserved.append(count)
+    driver.quit()
+    print(my_count_reserved)
+    print(sum(my_count_reserved))
+    my_count_available = subtract_arr(my_total,my_count_reserved)
+    data = {"date": x.strftime("%Y-%m-%d %H:%M"), "country":"my", "reserved": my_count_reserved, "available": my_count_available, "available_total": sum(my_count_available), "reserved_total": sum(my_count_reserved)}
+    print(data)
     db.put(data)
 
-app_th(th_url)
+app_my(my_url)
