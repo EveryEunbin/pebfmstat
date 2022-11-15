@@ -96,7 +96,7 @@ def app_my(url):
     data = {"date": x.strftime("%Y-%m-%d %H:%M"), "country":"my", "reserved": my_count_reserved, "available": my_count_available, "available_total": sum(my_count_available), "reserved_total": sum(my_count_reserved)}
     print(data)
     db.put(data)
-    test_data = db.fetch({'date?contains': x.strftime("%Y-%m-%d %H")})
+    test_data = db.fetch({'date?contains': x.strftime("%Y-%m-%d %H"), 'country':'my'})
     if len(test_data.items)==2:
         items = test_data.items
         item_one = items[0]
