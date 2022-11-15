@@ -1,8 +1,11 @@
 name: scrape
 on:
   workflow_dispatch:
+  repository_dispatch:
+    types: [run_from_rest_api]
+#   schedule may be delay
 #   schedule:
-#     - cron: '58 16 * * *'
+#     - cron: '59 16 * * *'
 
 jobs:
   scrape:
