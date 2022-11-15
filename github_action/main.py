@@ -21,7 +21,7 @@ load_dotenv()
 deta = Deta(os.getenv('DETA_PROJECT_KEY'))
 db = deta.Base("count-eunbin")
 
-chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+# chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
 
 chrome_options = Options()
 options = [
