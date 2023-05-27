@@ -9,15 +9,15 @@
   <meta name="author" content="Twitter @EveryEunbin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:title" content="PARK EUN-BIN Asia Fan Meeting Tour Stat">
-  <meta property="og:url" content="https://pebfmstat.deta.dev">
+  <meta property="og:url" content="{{ url }}">
   <meta property="og:description" content="BINGO!!! Don't waste your time counting the reservations of PARK EUN-BIN Asia Fan
   Meeting Tour">
-  <meta property="og:image" content="https://pebfmstat.deta.dev/file/eunbinfanmeeting.png">
+  <meta property="og:image" content="{{ url }}file/eunbinfanmeeting.png">
   <meta property="twitter:title" content="PARK EUN-BIN Asia Fan Meeting Tour Stat">
   <meta property="twitter:description" content="BINGO!!! Don't waste your time counting the reservations of PARK EUN-BIN Asia Fan
   Meeting Tour">
   <meta property="twitter:card" content="summary">
-  <meta property="twitter:image" content="https://pebfmstat.deta.dev/file/eunbinfanmeeting.png">
+  <meta property="twitter:image" content="{{ url }}file/eunbinfanmeeting.png">
   <meta property="twitter:site" content="@EveryEunbin">
 
   <meta charset="utf-8">
@@ -25,7 +25,7 @@
   <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <link rel="stylesheet" href={{url_for('static', filename='style.css' )}}>
-  <link rel="image_src" href="https://pebstat.deta.dev/file/eunbinfanmeeting.png">
+  <link rel="image_src" href="{{ url }}file/eunbinfanmeeting.png">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
@@ -46,7 +46,10 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#th">Thailand</a>
+            <a class="nav-link" aria-current="page" href="#my">Malaysia</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#th">Thailand</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#ph">Philippines</a>
@@ -62,6 +65,79 @@
   </nav>
 
   <div class="container-md">
+
+    <!-- MY start -->
+    <div id="my">
+      <h1 class="p-3 text-center">Malaysia</h1>
+    </div>
+    <h3 class="pb-3 text-center">Last updated {{my_date_last}} UTC+0:00</h3>
+    <div class="table-responsive container-fluid">
+      <table class="table table-striped table-hover table-bordered text-center">
+        <thead class="table-primary">
+          <tr>
+            <th scope="col">Zone\Status</th>
+            <th scope="col">Reserved</th>
+            <th scope="col">Available</th>
+            <th scope="col">Total</th>
+          </tr>
+        <tbody>
+          {% for (i,j,k,l) in my_last %}
+          <tr>
+            <th scope="row">{{i}}</th>
+            <td>{{j}}</td>
+            <td>{{k}}</td>
+            <td>{{l}}</td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <th scope="row">Total</th>
+            <td>{{my[-1]['reserved_total']}}</td>
+            <td>{{my[-1]['available_total']}}</td>
+            <td>{{ my[-1]['reserved_total']+my[-1]['available_total'] }}</td>
+          </tr>
+        </tbody>
+        </thead>
+      </table>
+    </div>
+    <!-- <div>
+      <p class="text-center">* 66 seats are blocked before Ticket Sales (STALLS center R,S,T and left S, and CIRCLE P13-P22) and many seats were reserved for other reasons. These 66 seats are not included in the table.</p>
+    </div> -->
+    <h3 class="p-3 text-center">Accumulaion of Reservations</h3>
+    <div class="table-responsive container-fluid">
+      <table class="table table-striped table-hover table-bordered text-center">
+        <thead class="table-primary">
+          <tr>
+            <th scope="col">Date\Zone</th>
+            {% for item in my_data.zone %}
+            <th scope="col">{{ item }}</th>
+            {% endfor %}
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in my|sort(attribute='date') %}
+          <tr>
+            <th scope="row">{{item.date}}</th>
+            {% for each in item.reserved %}
+            <td>{{each}}</td>
+            {% endfor %}
+            <td>{{item.reserved_total}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="container-md p-3">
+      <canvas id="myChart"></canvas>
+    </div>
+    <div class="p-3 text-center">
+      <h3>
+        <a href="https://www.excitix.com.my/event/33/Eun-Bin-Note:-Binkan-Park-Eun-Bin-Asia-Fans-Meeting-Tour-in-Kuala-Lumpur-2022"
+          target="_blank">Buy Tickets</a>
+      </h3>
+    </div>
+    <hr>
+
     <!-- TH start -->
     <div id="th">
       <h1 class="p-3 text-center">Thailand</h1>
@@ -235,7 +311,8 @@
       </table>
     </div>
     <div>
-      <p class="text-center">* 66 seats are blocked before Ticket Sales (STALLS center R,S,T and left S, and CIRCLE P13-P22) and many seats were reserved for other reasons. These 66 seats are not included in the table.</p>
+      <p class="text-center">* 66 seats are blocked before Ticket Sales (STALLS center R,S,T and left S, and CIRCLE
+        P13-P22) and many seats were reserved for other reasons. These 66 seats are not included in the table.</p>
     </div>
     <h3 class="p-3 text-center">Accumulaion of Reservations</h3>
     <div class="table-responsive container-fluid">
@@ -267,8 +344,7 @@
     </div>
     <div class="p-3 text-center">
       <h3>
-        <a href="https://allaccessasia.bigtix.io/e/EUNBIN22"
-          target="_blank">Buy Tickets</a>
+        <a href="https://allaccessasia.bigtix.io/e/EUNBIN22" target="_blank">Buy Tickets</a>
       </h3>
     </div>
     <hr>
@@ -276,14 +352,16 @@
     <!-- About start -->
     <div id="about">
       <p class="text-center"> BINGO!!! Don't waste your time counting the reservations of PARK EUN-BIN Asia Fan
-        Meeting Tour. Everyday the data is updated at midnight (Local Time in each country). This
+        Meeting Tour. Everyday the data is updated at midnight (Local time in each country). This
         is done by Python <a href="https://selenium.dev" target="_blank">Selenium</a>, <a
           href="https://www.crummy.com/software/BeautifulSoup/" target="_blank">BeautifulSoup</a>, <a
           href="https://flask.palletsprojects.com/en/2.2.x/" target="_blank">Flask</a> and <a
           href="https://docs.deta.sh/docs/home/" target="_blank">Deta</a> packages and deployed on <a
-          href="https://www.heroku.com/" target="_blank">Heroku</a> and <a href="https://www.deta.sh/"
+          href="https://www.heroku.com/" target="_blank">Heroku</a>, <a
+          href="https://docs.github.com/en/actions" target="_blank">Github Action</a> and <a href="https://www.deta.sh/"
           target="_blank">Deta Cloud</a>. Contact me via
-        my twitter account (<a href="https://twitter.com/EveryEunbin" target="_blank">@EveryEunbin</a>)</p>
+        my twitter account (<a href="https://twitter.com/EveryEunbin" target="_blank">@EveryEunbin</a>) or my Github
+        account (<a href="https://github.com/EveryEunbin" target="_blank">EveryEunbin</a>)</p>
     </div>
 
   </div>
@@ -296,12 +374,14 @@
     const allThData = {{ th | tojson }};
     const allPhData = {{ ph | tojson }};
     const allSgData = {{ sg | tojson }};
+    const allMyData = {{ my | tojson }};
   </script>
   <script>
     // plot all charts
     const thChart = plotChart("thChart", allThData);
     const phChart = plotChart("phChart", allPhData);
     const sgChart = plotChart("sgChart", allSgData);
+    const myChart = plotChart("myChart", allMyData);
   </script>
 
 </body>
