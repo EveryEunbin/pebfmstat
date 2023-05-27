@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_file
+from flask import Flask, render_template, send_file, request
 from deta import Deta 
 import os
 from dotenv import load_dotenv
@@ -7,6 +7,7 @@ from flask_cors import CORS
 load_dotenv()
 
 deta = Deta(os.getenv('DETA_PROJECT_KEY'))
+# deta = Deta()
 db = deta.Base("count-eunbin")
 
 drive = deta.Drive("images")
@@ -26,12 +27,21 @@ sg_data = {
     "total": [466, 384, 65]
 }
 
+my_data = {
+    "zone": ["VIP L", "VIP R", "CAT1 L", "CAT1 R", "CAT2 L", "CAT2 R"],
+    "total": [500, 500, 300, 300, 380, 380]
+}
+
+# def customSort(k):
+#     return k['date']
+
 app = Flask(__name__)
 
 CORS(app)
 
 @app.route('/', methods=["GET"])
 def index():
+    url = request.url_root
     th = db.fetch({"country": "th"})
     th = sorted(th.items, key=lambda item: item.get("date"))
     th_date_last = th[-1]['date']
@@ -50,7 +60,13 @@ def index():
     sg_last = zip(sg_data['zone'],sg[-1]['reserved'],sg[-1]['available'],sg_data['total'])
     sg_last = list(sg_last)
 
-    return render_template('index.html', th=th, th_data=th_data,th_last=th_last, th_date_last=th_date_last, ph=ph, ph_data=ph_data,ph_last=ph_last, ph_date_last=ph_date_last, sg=sg, sg_data=sg_data,sg_last=sg_last, sg_date_last=sg_date_last)
+    my = db.fetch({"country": "my"})
+    my = sorted(my.items, key=lambda item: item.get("date"))
+    my_date_last = my[-1]['date']
+    my_last = zip(my_data['zone'],my[-1]['reserved'],my[-1]['available'],my_data['total'])
+    my_last = list(my_last)
+
+    return render_template('index.html', url=url, th=th, th_data=th_data,th_last=th_last, th_date_last=th_date_last, ph=ph, ph_data=ph_data,ph_last=ph_last, ph_date_last=ph_date_last, sg=sg, sg_data=sg_data,sg_last=sg_last, sg_date_last=sg_date_last, my=my, my_data=my_data,my_last=my_last, my_date_last=my_date_last)
 
 @app.route('/file/<id>', methods=['GET'])
 def getFile(id):
